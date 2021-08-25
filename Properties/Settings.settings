@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Send_And_Delete.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Path" Type="System.String" Scope="User">
+      <Value Profile="(Default)">폴더 경로를 지정하세요.(클릭시 팝업)</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
