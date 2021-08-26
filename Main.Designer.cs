@@ -40,6 +40,10 @@ namespace Send_And_Delete
             this.TrayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.열기OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.종료ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listBox = new System.Windows.Forms.ListBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TextBox_URL = new System.Windows.Forms.TextBox();
             this.Menubar.SuspendLayout();
             this.TrayMenu.SuspendLayout();
             this.SuspendLayout();
@@ -48,14 +52,15 @@ namespace Send_And_Delete
             // 
             this.TextBox_path.Location = new System.Drawing.Point(12, 27);
             this.TextBox_path.Name = "TextBox_path";
-            this.TextBox_path.Size = new System.Drawing.Size(326, 21);
+            this.TextBox_path.ReadOnly = true;
+            this.TextBox_path.Size = new System.Drawing.Size(364, 21);
             this.TextBox_path.TabIndex = 0;
             this.TextBox_path.Text = "폴더 경로를 지정하세요.(클릭시 팝업)";
             this.TextBox_path.Click += new System.EventHandler(this.TextBox_path_Click);
             // 
             // Button_start
             // 
-            this.Button_start.Location = new System.Drawing.Point(344, 25);
+            this.Button_start.Location = new System.Drawing.Point(382, 27);
             this.Button_start.Name = "Button_start";
             this.Button_start.Size = new System.Drawing.Size(75, 23);
             this.Button_start.TabIndex = 1;
@@ -109,12 +114,52 @@ namespace Send_And_Delete
             this.종료ExitToolStripMenuItem.Text = "종료(Exit)";
             this.종료ExitToolStripMenuItem.Click += new System.EventHandler(this.TrayMenu_Exit);
             // 
+            // listBox
+            // 
+            this.listBox.FormattingEnabled = true;
+            this.listBox.ItemHeight = 12;
+            this.listBox.Location = new System.Drawing.Point(12, 77);
+            this.listBox.Name = "listBox";
+            this.listBox.Size = new System.Drawing.Size(695, 160);
+            this.listBox.TabIndex = 4;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(12, 221);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(695, 217);
+            this.richTextBox1.TabIndex = 5;
+            this.richTextBox1.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 55);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(182, 12);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "파일이 저장될 URL(클릭시 복사)";
+            // 
+            // TextBox_URL
+            // 
+            this.TextBox_URL.Location = new System.Drawing.Point(200, 52);
+            this.TextBox_URL.Name = "TextBox_URL";
+            this.TextBox_URL.ReadOnly = true;
+            this.TextBox_URL.Size = new System.Drawing.Size(293, 21);
+            this.TextBox_URL.TabIndex = 0;
+            this.TextBox_URL.Text = "http://sad.bbforest.net/";
+            this.TextBox_URL.Click += new System.EventHandler(this.TextBox_URL_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.listBox);
             this.Controls.Add(this.Button_start);
+            this.Controls.Add(this.TextBox_URL);
             this.Controls.Add(this.TextBox_path);
             this.Controls.Add(this.Menubar);
             this.MainMenuStrip = this.Menubar;
@@ -140,6 +185,10 @@ namespace Send_And_Delete
         private System.Windows.Forms.ContextMenuStrip TrayMenu;
         private System.Windows.Forms.ToolStripMenuItem 열기OpenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 종료ExitToolStripMenuItem;
+        private System.Windows.Forms.ListBox listBox;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox TextBox_URL;
     }
 }
 
