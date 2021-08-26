@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System.IO; //FileSystemWatcher
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Net;
+using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 namespace Send_And_Delete
 {
@@ -42,10 +44,13 @@ namespace Send_And_Delete
             Application.Exit();
         }
 
+        private string IP;
+
         private void Main_Load(object sender, EventArgs e)
         {
             TextBox_path.Text = Properties.Settings.Default.Path;
-            TextBox_URL.Text = "http://sad.bbforest.net/" + new WebClient().DownloadString("http://ipinfo.io/ip").Trim();
+            IP = new WebClient().DownloadString("http://ipinfo.io/ip").Trim();
+            TextBox_URL.Text = "http://sad.bbforest.net/" + IP;
         }
 
         private void Tray_Click(object sender, EventArgs e)
@@ -53,7 +58,7 @@ namespace Send_And_Delete
             //if (e.Button == MouseButtons.Left) this.Show();
         }
 
-        private Boolean Run = false, setup = false;
+        private Boolean Run = false, setup = false, ipf = false;
 
         private void Button_start_Click(object sender, EventArgs e)
         {
@@ -61,6 +66,30 @@ namespace Send_And_Delete
             listBox.Items.Add(Run);
             if (Run == true) FileWatcher();
             else watcher.EnableRaisingEvents = false;
+        }
+
+        private void Upload(string name, string link)
+        {
+            var protocol = new ConnectionInfo("Address", "ID", new PasswordAuthenticationMethod("ID", "PW"));
+            var sftp = new SftpClient(protocol);
+            // SFTP 서버 연결
+            sftp.Connect();
+            if (!ipf)
+            {
+                try
+                {
+                    sftp.CreateDirectory($"/upload/{IP}"); //폴더 생성 시도
+                }
+                catch (Exception)
+                {
+                    ipf = true; //실패시 폴더가 이미 있는 것으로 간주
+                }
+            }
+            using (var infile = File.Open(link, FileMode.Open))
+            {
+                sftp.UploadFile(infile, $"/upload/{IP}/{name}"); //업로드
+            }
+            sftp.Disconnect();
         }
 
         private FileSystemWatcher watcher = new FileSystemWatcher();
@@ -85,7 +114,9 @@ namespace Send_And_Delete
         private void Event(object source, FileSystemEventArgs e)
         {
             this.Invoke(new Action(delegate () { listBox.Items.Add($"{e.ChangeType}{e.FullPath}"); }));
-            
+            //if (e.ChangeType == FileSystemEventHandler.)
+            Upload(e.Name, e.FullPath);
+
         }
 
         private void TextBox_URL_Click(object sender, EventArgs e)

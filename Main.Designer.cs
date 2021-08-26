@@ -125,7 +125,7 @@ namespace Send_And_Delete
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 221);
+            this.richTextBox1.Location = new System.Drawing.Point(93, 221);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(695, 217);
             this.richTextBox1.TabIndex = 5;
