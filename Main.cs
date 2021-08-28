@@ -34,38 +34,58 @@ namespace Send_And_Delete
             }
         }
 
-        private void TrayMenu_Open(object sender, EventArgs e)
-        {
-            this.Show();
-        }
-
-        private void TrayMenu_Exit(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private string IP;
-
         private void Main_Load(object sender, EventArgs e)
         {
             TextBox_path.Text = Properties.Settings.Default.Path;
+            Autodelete.Checked = Properties.Settings.Default.AD;
+            AutoStart.Checked = Properties.Settings.Default.AutoRun;
+            WindowsRun.Checked = Properties.Settings.Default.WinStart;
+            ST_Tray.Checked = Properties.Settings.Default.ST_Tray;
+            if (Properties.Settings.Default.ST_Tray)
+            {
+                this.Opacity = 0;
+                this.ShowInTaskbar = false;
+                Tray.Visible = true;
+            }
             IP = new WebClient().DownloadString("http://ipinfo.io/ip").Trim();
             TextBox_URL.Text = "http://sad.bbforest.net/" + IP;
+            ListBox($"[SAD] 현재 설정");
+            ListBox($"    설정 폴더 : {TextBox_path.Text}");
+            ListBox($"    윈도우 시작시 자동 실행 : {WindowsRun.Checked}");
+            ListBox($"    시작시 자동 감시 : {AutoStart.Checked}");
+            ListBox($"    시작시 트레이로 : {ST_Tray.Checked}");
+            ListBox($"    업로드 후 삭제 : {Autodelete.Checked}");
+            ListBox($"    업로드 URL : {TextBox_URL.Text}");
+            if (AutoStart.Checked) RunSet();
         }
 
         private void Tray_Click(object sender, EventArgs e)
         {
-            //if (e.Button == MouseButtons.Left) this.Show();
+            this.Opacity = 1;
+            this.ShowInTaskbar = true;
+            Tray.Visible = false;
+            this.WindowState = FormWindowState.Normal;
         }
-
-        private Boolean Run = false, setup = false, ipf = false;
 
         private void Button_start_Click(object sender, EventArgs e)
         {
+            RunSet();
+        }
+
+        private void RunSet()
+        {
             Run = !Run;
-            listBox.Items.Add(Run);
-            if (Run == true) FileWatcher();
-            else watcher.EnableRaisingEvents = false;
+            ListBox($"[SAD] 감시 상태 : {Run}");
+            if (Run == true)
+            {
+                FileWatcher();
+                this.Text = "SAD(전송 및 삭제, Send And Delete) 감시중";
+            }
+            else
+            {
+                watcher.EnableRaisingEvents = false;
+                this.Text = "SAD(전송 및 삭제, Send And Delete)";
+            }
         }
 
         private void Upload(string name, string link)
@@ -79,6 +99,11 @@ namespace Send_And_Delete
                 try
                 {
                     sftp.CreateDirectory($"/upload/{IP}"); //폴더 생성 시도
+                    using (var outfile = File.Create("index.html"))
+                    {
+                        sftp.DownloadFile("/upload/gal.html", outfile);
+                        sftp.UploadFile(outfile, $"/upload/{IP}/index.html");
+                    }
                 }
                 catch (Exception)
                 {
@@ -90,9 +115,9 @@ namespace Send_And_Delete
                 sftp.UploadFile(infile, $"/upload/{IP}/{name}"); //업로드
             }
             sftp.Disconnect();
+            ListBox($"[SAD] 업로드 완료 : {TextBox_URL.Text}/{name}");
+            if(Autodelete.Checked) File.Delete(link); //자동삭제 체크시 삭제
         }
-
-        private FileSystemWatcher watcher = new FileSystemWatcher();
 
         private void FileWatcher()
         {
@@ -113,10 +138,8 @@ namespace Send_And_Delete
 
         private void Event(object source, FileSystemEventArgs e)
         {
-            this.Invoke(new Action(delegate () { listBox.Items.Add($"{e.ChangeType}{e.FullPath}"); }));
-            //if (e.ChangeType == FileSystemEventHandler.)
-            Upload(e.Name, e.FullPath);
-
+            ListBox($"[FILE] {e.ChangeType} : {e.Name}");
+            if (e.ChangeType.ToString() == "Created") Upload(e.Name, e.FullPath);
         }
 
         private void TextBox_URL_Click(object sender, EventArgs e)
@@ -127,8 +150,111 @@ namespace Send_And_Delete
 
         private void Rename(object source, RenamedEventArgs e)
         {
-            string sub = e.FullPath.Replace(Properties.Settings.Default.Path, "");
-            this.Invoke(new Action(delegate () { listBox.Items.Add($"{e.Name}{sub}"); }));
+            //string sub = e.FullPath.Replace(Properties.Settings.Default.Path, "");
+            ListBox($"[FILE] 이름 변경 : {e.Name}");
         }
+
+        private void Autodelete_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AD = Autodelete.Checked;
+            Properties.Settings.Default.Save();
+            ListBox($"[SAD] 업로드 후 삭제 : {Autodelete.Checked}");
+        }
+
+        private void ListBox(string msg)
+        {
+            this.Invoke(new Action(delegate () {
+                listBox.Items.Add(msg);
+                listBox.SelectedIndex = listBox.Items.Count - 1;
+                listBox.SelectedIndex = -1;
+            }));
+        }
+
+        private void UploadView_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(TextBox_URL.Text);
+        }
+
+        private string IP;
+        private Boolean Run = false, setup = false, ipf = false;
+
+        private void AutoStart_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoRun = AutoStart.Checked;
+            Properties.Settings.Default.Save();
+            ListBox($"[SAD] 시작시 자동 감시 : {AutoStart.Checked}");
+        }
+
+        private void WindowsRun_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.WinStart = WindowsRun.Checked;
+            Properties.Settings.Default.Save();
+            ListBox($"[SAD] 윈도우 시작시 자동 실행 : {WindowsRun.Checked}");
+            if (WindowsRun.Checked) AddStartupProgram("net.bbforest.sad", Application.ExecutablePath);
+            else if (!WindowsRun.Checked) RemoveStartupProgram("net.bbforest.sad");
+        }
+
+        private static readonly string _startupRegPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+
+        private Microsoft.Win32.RegistryKey GetRegKey(string regPath, bool writable)
+        {
+            return Microsoft.Win32.Registry.CurrentUser.OpenSubKey(regPath, writable);
+        }
+
+        public void AddStartupProgram(string programName, string executablePath)
+        {
+            using (var regKey = GetRegKey(_startupRegPath, true))
+            {
+                try
+                {
+                    // 키가 이미 등록돼 있지 않을때만 등록
+                    if (regKey.GetValue(programName) == null)
+                        regKey.SetValue(programName, executablePath);
+
+                    regKey.Close();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private void ST_Tray_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ST_Tray = ST_Tray.Checked;
+            Properties.Settings.Default.Save();
+            ListBox($"[SAD] 시작시 트레이로 : {ST_Tray.Checked}");
+        }
+
+        private void Main_Move(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Opacity = 0;
+                this.ShowInTaskbar = false;
+                Tray.Visible = true;
+            }
+        }
+
+        // 등록된 프로그램 제거
+        public void RemoveStartupProgram(string programName)
+        {
+            using (var regKey = GetRegKey(_startupRegPath, true))
+            {
+                try
+                {
+                    // 키가 이미 존재할때만 제거
+                    if (regKey.GetValue(programName) != null)
+                        regKey.DeleteValue(programName, false);
+
+                    regKey.Close();
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
+        private FileSystemWatcher watcher = new FileSystemWatcher();
     }
 }
