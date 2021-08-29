@@ -46,6 +46,7 @@ namespace Send_And_Delete
             this.AutoStart = new System.Windows.Forms.CheckBox();
             this.WindowsRun = new System.Windows.Forms.CheckBox();
             this.ST_Tray = new System.Windows.Forms.CheckBox();
+            this.ver = new System.Windows.Forms.Label();
             this.Menubar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -142,9 +143,9 @@ namespace Send_And_Delete
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("나눔바른고딕OTF", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label2.Location = new System.Drawing.Point(393, 228);
+            this.label2.Location = new System.Drawing.Point(390, 174);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(391, 162);
+            this.label2.Size = new System.Drawing.Size(391, 216);
             this.label2.TabIndex = 10;
             this.label2.Text = resources.GetString("label2.Text");
             // 
@@ -181,11 +182,22 @@ namespace Send_And_Delete
             this.ST_Tray.UseVisualStyleBackColor = true;
             this.ST_Tray.Click += new System.EventHandler(this.ST_Tray_Click);
             // 
+            // ver
+            // 
+            this.ver.AutoSize = true;
+            this.ver.Font = new System.Drawing.Font("나눔바른고딕OTF", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.ver.Location = new System.Drawing.Point(404, 372);
+            this.ver.Name = "ver";
+            this.ver.Size = new System.Drawing.Size(59, 18);
+            this.ver.TabIndex = 11;
+            this.ver.Text = "0.0.0.0";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(818, 399);
+            this.Controls.Add(this.ver);
             this.Controls.Add(this.ST_Tray);
             this.Controls.Add(this.WindowsRun);
             this.Controls.Add(this.AutoStart);
@@ -197,10 +209,12 @@ namespace Send_And_Delete
             this.Controls.Add(this.TextBox_URL);
             this.Controls.Add(this.TextBox_path);
             this.Controls.Add(this.Menubar);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.Menubar;
             this.Name = "Main";
             this.Text = "SAD(전송 및 삭제, Send And Delete)";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.Move += new System.EventHandler(this.Main_Move);
             this.Menubar.ResumeLayout(false);
@@ -227,6 +241,7 @@ namespace Send_And_Delete
         private System.Windows.Forms.CheckBox AutoStart;
         private System.Windows.Forms.CheckBox WindowsRun;
         private System.Windows.Forms.CheckBox ST_Tray;
+        private System.Windows.Forms.Label ver;
     }
 }
 

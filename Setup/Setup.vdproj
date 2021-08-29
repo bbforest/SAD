@@ -16,49 +16,37 @@
         "Entry"
         {
         "MsmKey" = "8:_2ADDBEA084F15A6BC43651137DA54552"
-        "OwnerKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+        "OwnerKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_589F5756CCA0E58641436BDDB62B9F2F"
-        "OwnerKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+        "OwnerKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_5FE0F2893256A37A272AEC769A42AB96"
-        "OwnerKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_923F5BC9962541679F22D28ABF75A8C0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
-        "OwnerKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_E308FBABA3EFBAC521FE2B4E6B5AB9D1"
-        "OwnerKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+        "OwnerKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5FE0F2893256A37A272AEC769A42AB96"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+        "OwnerKey" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -77,6 +65,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_589F5756CCA0E58641436BDDB62B9F2F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5FE0F2893256A37A272AEC769A42AB96"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -102,7 +96,7 @@
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
-            "Url" = "8:"
+            "Url" = "8:http://bbforest.net"
             "ComponentsUrl" = "8:"
                 "Items"
                 {
@@ -129,6 +123,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -150,9 +160,9 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.7.2"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.6"
                 "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=863262"
+                "InstallUrl" = "8:https://go.microsoft.com/fwlink/?LinkId=528222"
                 }
             }
         }
@@ -251,26 +261,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_923F5BC9962541679F22D28ABF75A8C0"
-            {
-            "SourcePath" = "8:E:\\로고 및 프로필\\ci-500.ico"
-            "TargetName" = "8:bbforest.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_3E08E1F2C2CE446AB5D6B7405F529882"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E308FBABA3EFBAC521FE2B4E6B5AB9D1"
             {
             "AssemblyRegister" = "3:1"
@@ -358,15 +348,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:파란대나무숲 SAD"
-        "ProductCode" = "8:{46335FBB-9735-4650-B548-85A7FA17F3A0}"
-        "PackageCode" = "8:{9768E220-3A46-4641-9DFB-0B8D3D0B9DD0}"
+        "ProductCode" = "8:{4D53BC4D-EBF9-45FB-826E-900AE59FC2E7}"
+        "PackageCode" = "8:{06006860-74BA-4C82-B6F6-83EA52150AB0}"
         "UpgradeCode" = "8:{51FB6C6E-A601-4659-B0AF-A59237ABA414}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.3"
         "Manufacturer" = "8:BlueBambooForest"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -479,32 +469,32 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_452DDD995A634883BD745D45025AC731"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_01B09CBAC2A2427AB99C45D33704FE40"
             {
-            "Name" = "8:SAD"
+            "Name" = "8:파란대나무숲 SAD"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
+            "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+            "Target" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
             "Folder" = "8:_0790EB4DAE854CC09E527608DB05E83B"
             "WorkingFolder" = "8:_3E08E1F2C2CE446AB5D6B7405F529882"
-            "Icon" = "8:_923F5BC9962541679F22D28ABF75A8C0"
+            "Icon" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A390BE95D59F495D8453C01943A79C7D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_10D240187CAC47F1AFBFB17BDC98F35C"
             {
-            "Name" = "8:SAD"
+            "Name" = "8:파란대나무숲 SAD"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
+            "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_977F33ECC7DD47339637F0D5466A3C8A"
+            "Target" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
             "Folder" = "8:_DB8099939D614F67B57CB1B76E29CCFE"
             "WorkingFolder" = "8:_3E08E1F2C2CE446AB5D6B7405F529882"
-            "Icon" = "8:_923F5BC9962541679F22D28ABF75A8C0"
+            "Icon" = "8:_459EF3A329714C44992F0FEDC0DFFF61"
             "Feature" = "8:"
             }
         }
@@ -906,7 +896,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_977F33ECC7DD47339637F0D5466A3C8A"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_459EF3A329714C44992F0FEDC0DFFF61"
             {
             "SourcePath" = "8:..\\obj\\Debug\\Send-And-Delete.exe"
             "TargetName" = "8:"
