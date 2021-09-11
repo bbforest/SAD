@@ -17,29 +17,20 @@ namespace Send_And_Delete
             this.MaximizeBox = false;
 
             //중복실행방지
-            System.Diagnostics.Process[] processes = null;
-            string CurrentProcess = System.Diagnostics.Process.GetCurrentProcess().ProcessName.ToUpper();
-            processes = System.Diagnostics.Process.GetProcessesByName(CurrentProcess);
+            Process[] processes = null;
+            string CurrentProcess = Process.GetCurrentProcess().ProcessName.ToUpper();
+            processes = Process.GetProcessesByName(CurrentProcess);
             if (processes.Length > 1)
             {
                 MessageBox.Show("이미 SAD가 실행중입니다.\n작업표시줄 오른쪽 아이콘을 확인해보세요!", "파란대나무숲 SAD :(", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //Application.Exit();
                 Environment.Exit(0);
             }
-            WebClient wc = new WebClient();
-            string new_ver = wc.DownloadString("http://sad.bbforest.net/ver.txt");
-            ver.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if (ver.Text != new_ver)
-            {
-                DialogResult result = MessageBox.Show("업데이트가 있습니다! 업데이트 할까요?", "파란대나무숲 SAD :(", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result == DialogResult.Yes)
-                {
-                    wc.DownloadFile("http://sad.bbforest.net/sad.msi", Environment.GetEnvironmentVariable("temp") + "\\sad.msi");
-                    Process.Start(Environment.GetEnvironmentVariable("temp") + "\\sad.msi");
-                    Environment.Exit(0);
-                }
-            }
         }
+
+        private string IP;
+        private bool Run = false, setup = false, ipf = false;
+        private FileSystemWatcher watcher = new FileSystemWatcher();
 
         private string SelectFolder() //폴더 선택
         {
@@ -63,6 +54,27 @@ namespace Send_And_Delete
 
         private void Main_Load(object sender, EventArgs e)
         {
+            try
+            {
+                WebClient wc = new WebClient();
+                string new_ver = wc.DownloadString("http://sad.bbforest.net/ver.txt");
+                ver.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                if (ver.Text != new_ver)
+                {
+                    DialogResult result = MessageBox.Show("업데이트가 있습니다! 업데이트 할까요?", "파란대나무숲 SAD :(", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (result == DialogResult.Yes)
+                    {
+                        wc.DownloadFile("http://sad.bbforest.net/sad.msi", Environment.GetEnvironmentVariable("temp") + "\\sad.msi");
+                        Process.Start(Environment.GetEnvironmentVariable("temp") + "\\sad.msi");
+                        Environment.Exit(0);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                ListBox($"[Error] 버전 확인 실패!");
+            }
+
             TextBox_path.Text = Properties.Settings.Default.Path;
             Autodelete.Checked = Properties.Settings.Default.AD;
             AutoStart.Checked = Properties.Settings.Default.AutoRun;
@@ -117,32 +129,39 @@ namespace Send_And_Delete
 
         private void Upload(string name, string link)
         {
-            var protocol = new ConnectionInfo("Address", "ID", new PasswordAuthenticationMethod("ID", "PW"));
-            var sftp = new SftpClient(protocol);
-            // SFTP 서버 연결
-            sftp.Connect();
-            if (!ipf)
+            try
             {
-                try
+                var protocol = new ConnectionInfo("Address", "ID", new PasswordAuthenticationMethod("ID", "PW"));
+                var sftp = new SftpClient(protocol);
+                // SFTP 서버 연결
+                sftp.Connect();
+                if (!ipf)
                 {
-                    sftp.CreateDirectory($"/upload/{IP}"); //폴더 생성 시도
-                    ListBox($"[SAD] 서버에 폴더 생성");
-                    ipf = true;
-                    return;
+                    try
+                    {
+                        sftp.CreateDirectory($"/upload/{IP}"); //폴더 생성 시도
+                        ListBox($"[SAD] 서버에 폴더 생성");
+                        ipf = true;
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        ipf = true; //실패시 폴더가 이미 있는 것으로 간주
+                        return;
+                    }
                 }
-                catch (Exception)
+                using (var infile = File.Open(link, FileMode.Open))
                 {
-                    ipf = true; //실패시 폴더가 이미 있는 것으로 간주
-                    return;
+                    sftp.UploadFile(infile, $"/upload/{IP}/{name}"); //업로드
                 }
+                sftp.Disconnect();
+                if (name != "index.php") ListBox($"[SAD] 업로드 완료 : {TextBox_URL.Text}/{name}");
+                if(Autodelete.Checked) File.Delete(link); //자동삭제 체크시 삭제
             }
-            using (var infile = File.Open(link, FileMode.Open))
+            catch (Exception)
             {
-                sftp.UploadFile(infile, $"/upload/{IP}/{name}"); //업로드
+                ListBox($"[Error] 업로드 서버 연결 실패!");
             }
-            sftp.Disconnect();
-            if (name != "index.php") ListBox($"[SAD] 업로드 완료 : {TextBox_URL.Text}/{name}");
-            if(Autodelete.Checked) File.Delete(link); //자동삭제 체크시 삭제
         }
 
         private void FileWatcher()
@@ -213,9 +232,6 @@ namespace Send_And_Delete
             System.Diagnostics.Process.Start(TextBox_URL.Text);
         }
 
-        private string IP;
-        private Boolean Run = false, setup = false, ipf = false;
-
         private void AutoStart_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.AutoRun = AutoStart.Checked;
@@ -277,8 +293,7 @@ namespace Send_And_Delete
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show("프로그램을 종료할까요?\n최소화를 누르면 트레이에서 동작해요!", "파란대나무숲 SAD :(", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (result == DialogResult.Yes) Environment.Exit(0);
-            else e.Cancel = true;
+            if (result == DialogResult.No) e.Cancel = true;
         }
 
         // 등록된 프로그램 제거
@@ -299,7 +314,5 @@ namespace Send_And_Delete
                 }
             }
         }
-
-        private FileSystemWatcher watcher = new FileSystemWatcher();
     }
 }
